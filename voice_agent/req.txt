@@ -1,0 +1,7 @@
+livekit==0.18.1
+livekit-agents==0.11.3
+livekit-api==0.8.0
+livekit-plugins-deepgram==0.6.11
+livekit-plugins-openai==0.10.7
+livekit-plugins-silero==0.7.3
+livekit-protocol==0.7.0
