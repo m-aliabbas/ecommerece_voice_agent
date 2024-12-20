@@ -42,11 +42,20 @@ class AssistantFnc(llm.FunctionContext):
 
         # List of possible messages to send
         messages = [
-            f"Searching for information related to: '{query}'. This may take a moment."
+            "Let me find that for you. One moment, please.",
+            "I'm on it. Please hold on.",
+            "Just a second, gathering the details now.",
+            "Searching the database for you.",
+            "Hold tight, I'm fetching the information.",
+            "Looking that up right now.",
+            "Give me a moment to retrieve that.",
+            "I'll have the details for you in just a bit.",
+            "Hang on, I'm finding the best match for you.",
+            "Working on it, this will just take a few seconds."
         ]
         
         # Send the message to the user
-        await call_ctx.agent.say(messages[0], add_to_chat_ctx=True)
+        await call_ctx.agent.say(random.choice(messages), add_to_chat_ctx=True)
 
         headers = {
             "Content-Type": "application/json",
@@ -86,9 +95,10 @@ async def entrypoint(ctx: JobContext):
     fnc_ctx = AssistantFnc()  # create our fnc ctx instance
     initial_chat_ctx = llm.ChatContext().append(
         text=(
-            "You are helpfull conversational assistant at Sunna Musk. Sunna Musk is a London Based Perfume Store. You will conversation with user in polite manner. "
+            "You are helpfull conversational assistant and salesman at Sunna Musk. Sunna Musk is a London Based Perfume Store. You will conversation with user in polite manner. "
             "please call the function  user want to get additional information or you need it for specific answer. Call the function if you need to get answer of specific question or get information about perfumes."
             "Sunnamusk collaborates with highly skilled perfumers to produce an exclusive range of the finest fragrances. Our passion and commitment to quality craftsmanship resonates with discerning customers who appreciate exquisite scents. Since our conception, we have retained a disruptive and agile nature that sets us apart from brand competitors - we refuse to match the status quo of perfumery."
+            "Please provide polite reply."
         ),
         role="system",
     )
@@ -96,7 +106,7 @@ async def entrypoint(ctx: JobContext):
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(),
-        llm=openai.LLM.with_groq("llama-3.1-70b-versatile"),
+        llm=openai.LLM(),
         tts=openai.TTS(),
         fnc_ctx=fnc_ctx,
         chat_ctx=initial_chat_ctx,
